@@ -4,7 +4,7 @@ A live map of every Metra train in the Chicago region, moving in real time on a 
 
 Built to sit on a second monitor like an aquarium: quiet, calm, and fun to watch for hours. Also works on a phone.
 
-**Live site:** `https://YOUR-USERNAME.github.io/metra-live-network/metra_live.html`
+**Live site:** `https://evan-dawkins.github.io/metra-live-network/`
 
 ---
 
@@ -38,11 +38,11 @@ Built to sit on a second monitor like an aquarium: quiet, calm, and fun to watch
 ## How it works
 
 ```
-Metra's live feeds  →  Cloudflare Worker (worker.js)  →  metra_live.html in your browser
+Metra's live feeds  →  Cloudflare Worker (worker.js)  →  index.html in your browser
  (protobuf, ~30 s)      decodes to clean JSON              draws the map and trains
 ```
 
-- **`metra_live.html`**: the whole dashboard in one file. No build step, no install. Open it in a browser or host it anywhere.
+- **`index.html`**: the whole dashboard in one file. No build step, no install. Open it in a browser or host it anywhere.
 - **`worker.js`**: a small Cloudflare Worker that fetches Metra's GTFS-realtime **vehicle positions** and **service alerts** feeds, decodes them by hand (no libraries), and returns JSON. It's needed because browsers can't call Metra's feed directly, and Metra's license asks that apps serve the data through their own server rather than sending users to Metra's.
 - The dashboard checks for new data every 30 seconds, which is how often Metra updates its feed.
 
@@ -51,16 +51,20 @@ Metra's live feeds  →  Cloudflare Worker (worker.js)  →  metra_live.html in 
 1. **Get a Metra API key** by filling out the form at [metra.com/developers](https://metra.com/developers).
 2. **Create a Cloudflare Worker**, paste in `worker.js`, and click **Deploy**.
 3. **Add your key as a secret** on the Worker (Settings → Variables and Secrets) named `METRA_API_TOKEN`. The key lives only in Cloudflare, never in this repo.
-4. **Point the dashboard at your Worker**: in `metra_live.html`, change `WORKER_URL` to your Worker's address.
-5. **Host the page**: turn on GitHub Pages for this repo (Settings → Pages → branch `main`, folder `/ (root)`), or just open the file in a browser.
+4. **Point the dashboard at your Worker**: in `index.html`, change `WORKER_URL` to your Worker's address.
+5. **Host the page**: turn on GitHub Pages for this repo (Settings → Pages → branch `main`, folder `/ (root)`). The dashboard is named `index.html`, so it opens straight from the site's main link. You can also just open the file in a browser.
 
 ## Files
 
 | File | What it is |
 |---|---|
-| `metra_live.html` | The dashboard |
+| `index.html` | The dashboard |
 | `worker.js` | The Cloudflare Worker (backup copy; Cloudflare is what actually runs it) |
 | `README.md` | This file |
+
+## Updating the dashboard
+
+Replace `index.html` with the new version (Add file → Upload files, same name) and commit. GitHub Pages republishes it in about a minute, and the link stays the same.
 
 ## Notes
 
